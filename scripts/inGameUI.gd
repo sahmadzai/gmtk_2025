@@ -120,7 +120,6 @@ func _input(event):
 
 		# handle backspace
 		if event.is_action_pressed("ui_text_backspace"):
-			print("YA BOMBACLOT")
 			var buttons = _get_buttons()
 			var index = buttons.find(selected_button)
 			if index > 0:
