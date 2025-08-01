@@ -29,11 +29,8 @@ func _input(event):
 			
 		else: # switching back to automatic (don't disable loop)
 			# simulate an event start (G press)
-			var nextEvent = InputEventAction.new()
-			nextEvent.action = "start_loop"
-			nextEvent.pressed = true
-			moving = false
-			_input(nextEvent)
+			#moving = false # should already be false
+			_press_G_start()
 
 	elif event.is_action_pressed("start_loop"):  # Press G to start the loop
 		print("Here is the move sequence ", move_sequence)
