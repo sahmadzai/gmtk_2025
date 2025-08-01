@@ -19,7 +19,7 @@ var stuck_check := 0
 func _ready():
 	print("PLAYER SCRIPT READY")
 
-func _input(event):
+func _input(event):	
 	if event.is_action_pressed("toggle_manual"):  # Press M to toggle manual control
 		manual_control = !manual_control
 		loop_active = false  # Disable loop when switching to manual
@@ -95,6 +95,18 @@ func _physics_process(delta):
 func _on_move_inputs_updated(new_sequence):
 	move_sequence = new_sequence.duplicate()
 	print("Move sequence updated:", move_sequence)
+	
+# wrapper function for _on_move_inputs_updated
+# used specifically when: 1. should_auto_focus and 2. we have fully populated the sequence list
+func _on_final_move_input_updated(new_sequence):
+	print("reached my custom function")
+	_on_move_inputs_updated(new_sequence)
+	
+	# simulate an event start (G press)
+	var event = InputEventAction.new()
+	event.action = "start_loop"
+	event.pressed = true
+	_input(event)
 
 func update_animation(input_vector: Vector2) -> void:
 	# Determine idle animation based on last direction

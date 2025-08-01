@@ -1,10 +1,12 @@
 extends Control
 
 signal move_inputs_updated(move_sequence)
+signal final_move_input_updated(move_sequence)
 
 var selected_button : Button = null
 var move_sequence := []
 var tween_map: Dictionary = {}
+var should_auto_focus = true
 
 # Map input to icon names and directions
 const INPUT_TEXTURES = {
@@ -36,6 +38,9 @@ func _ready():
 			var result = button.pressed.connect(_on_MoveButton_pressed.bind(button), CONNECT_DEFERRED)
 			if result != OK:
 				print("Failed to connect pressed() signal for: ", button.name)
+				
+	if should_auto_focus and not buttons.is_empty():
+		_on_MoveButton_pressed(buttons[0] as Button)
 
 func _on_MoveButton_pressed(button: Button):
 	# edge case: if selected button still exists (user did not enter a directional input) then stop flashing it
@@ -91,6 +96,18 @@ func _input(event):
 				stop_selection_animation(selected_button)
 				selected_button.release_focus()
 				selected_button = null
+				
+				print(index, "ay")
+				print(len(move_sequence)-1, "ya bombaclat")
+				if should_auto_focus:
+					if index < len(move_sequence) - 1:
+						print("taking path 1")
+						_on_MoveButton_pressed(buttons[index + 1] as Button)
+					else:
+						print("taking path 2")
+						emit_signal("final_move_input_updated", move_sequence)
+						break
+				
 				emit_signal("move_inputs_updated", move_sequence)
 				break
 
