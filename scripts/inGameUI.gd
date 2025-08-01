@@ -29,8 +29,8 @@ const INPUT_DIRECTIONS = {
 
 func _ready():
 	print("INGAMEUI SCRIPT READY")
-	var buttons = get_node("MarginContainer/HBoxContainer/HBoxContainer").get_children()
-	move_sequence.resize(buttons.size())
+	var buttons = get_node("MarginContainer/HBoxContainer/HBoxContainer").get_children() # grabs the number of buttons that are in the scene tree
+	move_sequence.resize(buttons.size()) # resizes the internal move sequence counter based on the number of buttons grabbed from the scene tree
 
 	for button in buttons:
 		if button is Button:
@@ -43,6 +43,10 @@ func _ready():
 				print("Failed to connect pressed() signal for: ", button.name)
 
 func _on_MoveButton_pressed(button: Button):
+	# edge case: if a user presses a button, does not make an input, and then presses another button, you need to stop the first button from flashing
+	stop_selection_animation(selected_button)
+	
+	# do normal button things
 	selected_button = button
 	print("Button press detected: ", button.name)
 	start_selection_animation(button)
@@ -96,7 +100,8 @@ func _input(event):
 
 # Handles resetting all sequence inputs and changes the button icons back to default.
 func reset_inputs():
-	move_sequence = [null, null, null]
+	print("bombaclot test") # apparently this function is never run so idk why we have this
+	move_sequence = [null, null, null, null]
 	var buttons = get_node("MarginContainer/HBoxContainer/HBoxContainer").get_children()
 	for button in buttons:
 		if button is Button:
