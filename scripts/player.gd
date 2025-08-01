@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 signal backspace_pressed
 
-const SPEED = 150.0  # Movement speed of the player
+const SPEED = 50.0  # Movement speed of the player
 
 var manual_control := false  # Toggle for manual arrow key movement (debugging)
 var starting_position: Vector2
@@ -11,11 +11,8 @@ var moving: bool = false
 var move_sequence := []  # Stores sequence of directions to move in
 var loop_active := false
 var current_step := 0
-var loop_timer := 0.4
-var loop_time_accumulator := 0.0
 var loop_history := []
 var last_direction := Vector2.DOWN  # Used to determine idle animation
-var stuck_check := 0
 
 @onready var anim = $AnimatedSprite2D  # Reference to AnimatedSprite2D node
 
@@ -37,7 +34,6 @@ func _input(event):
 		loop_active = true
 		current_step = 0
 		loop_history.clear()
-		stuck_check = 0
 
 	elif event.is_action_pressed("reset_loop"):
 		_reset_full_level()  # Press R to reset the level
@@ -58,7 +54,6 @@ func _reset_player_but_save_actions():
 	loop_active = false
 	current_step = 0
 	loop_history.clear()
-	stuck_check = 0
 	update_animation(Vector2.ZERO)
 	
 	emit_signal("backspace_pressed")
@@ -92,7 +87,7 @@ func _physics_process(delta):
 				"ui_left": dir =  Vector2.LEFT
 				"ui_right": dir = Vector2.RIGHT
 
-			var new_target = global_position + dir * 32  # Move by 1 tile (32px)
+			var new_target = global_position + dir * 16  # Move by 4 tiles (16px)
 			var collision_check = test_move(global_transform, dir * 2)
 
 			if collision_check:
@@ -110,7 +105,14 @@ func _physics_process(delta):
 
 	# Complete movement and snap to grid
 	if moving:
-		move_and_slide()
+		var collision = move_and_collide(velocity * delta)
+		
+		if collision:
+			velocity = Vector2.ZERO
+			moving = false
+			current_step = (current_step + 1) % move_sequence.size()
+			return
+
 		if global_position.distance_to(target_position) < 2.0:
 			global_position = target_position
 			velocity = Vector2.ZERO
