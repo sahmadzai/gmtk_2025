@@ -31,6 +31,7 @@ func _input(event):
 		print("Manual Control:", manual_control)
 
 	elif event.is_action_pressed("start_loop"):  # Press G to start the loop
+		print("Here is the move sequence ", move_sequence)
 		if move_sequence.size() == 0 or move_sequence.has(null):
 			print("Move sequence is incomplete or empty.")
 			return
