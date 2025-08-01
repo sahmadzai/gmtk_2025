@@ -101,7 +101,7 @@ func _input(event):
 # Handles resetting all sequence inputs and changes the button icons back to default.
 func reset_inputs():
 	print("bombaclot test") # apparently this function is never run so idk why we have this
-	move_sequence = [null, null, null, null]
+	move_sequence = [null, null, null, null] # lowkey remove this entire function idk
 	var buttons = get_node("MarginContainer/HBoxContainer/HBoxContainer").get_children()
 	for button in buttons:
 		if button is Button:
