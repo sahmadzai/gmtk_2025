@@ -42,7 +42,7 @@ func _input(event):
 	elif event.is_action_pressed("reset_loop"):
 		_reset_full_level()  # Press R to reset the level
 
-	elif event.is_action_pressed("ui_text_backspace"):
+	elif loop_active and event.is_action_pressed("ui_text_backspace"):
 		_reset_player_but_save_actions()
 
 func _reset_full_level():
@@ -87,9 +87,9 @@ func _physics_process(delta):
 			var dir = Vector2.ZERO
 
 			match action:
-				"ui_up": dir = Vector2.UP
-				"ui_down": dir = Vector2.DOWN
-				"ui_left": dir = Vector2.LEFT
+				"ui_up": dir =    Vector2.UP
+				"ui_down": dir =  Vector2.DOWN
+				"ui_left": dir =  Vector2.LEFT
 				"ui_right": dir = Vector2.RIGHT
 
 			var new_target = global_position + dir * 32  # Move by 1 tile (32px)
