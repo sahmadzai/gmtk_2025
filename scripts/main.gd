@@ -1,7 +1,3 @@
-# File: MainScene.gd
-# Description: Root scene script for connecting UI signals to the Player.
-# Authors: Shamsullah Ahmadzai, David Huang, Bruke Amare
-
 extends Node2D
 
 func _ready():

@@ -1,8 +1,3 @@
-# File: player.gd
-# Description: Player controller that supports both manual (debug) movement 
-# 			   and looped movement based on a predefined input sequence.
-# Authors: Shamsullah Ahmadzai, David Huang, Bruke Amare
-
 extends CharacterBody2D
 
 const SPEED = 150.0  # Movement speed of the player
@@ -31,6 +26,7 @@ func _input(event):
 		print("Manual Control:", manual_control)
 
 	elif event.is_action_pressed("start_loop"):  # Press G to start the loop
+		print("Here is the move sequence ", move_sequence)
 		if move_sequence.size() == 0 or move_sequence.has(null):
 			print("Move sequence is incomplete or empty.")
 			return

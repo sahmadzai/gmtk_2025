@@ -1,8 +1,3 @@
-# File: inGameUI.gd
-# Description: UI panel for customizing move sequences and sending them to 
-#			   the player.
-# Authors: Shamsullah Ahmadzai, David Huang, Bruke Amare
-
 extends Control
 
 signal move_inputs_updated(move_sequence)
@@ -29,8 +24,8 @@ const INPUT_DIRECTIONS = {
 
 func _ready():
 	print("INGAMEUI SCRIPT READY")
-	var buttons = get_node("MarginContainer/HBoxContainer/HBoxContainer").get_children()
-	move_sequence.resize(buttons.size())
+	var buttons = get_node("MarginContainer/HBoxContainer/HBoxContainer").get_children() # grabs the number of buttons that are in the scene tree
+	move_sequence.resize(buttons.size()) # resizes the internal move sequence counter based on the number of buttons grabbed from the scene tree
 
 	for button in buttons:
 		if button is Button:
@@ -43,6 +38,11 @@ func _ready():
 				print("Failed to connect pressed() signal for: ", button.name)
 
 func _on_MoveButton_pressed(button: Button):
+	# edge case: if selected button still exists (user did not enter a directional input) then stop flashing it
+	if selected_button and selected_button != button:
+		stop_selection_animation(selected_button)
+	
+	# do normal button things
 	selected_button = button
 	print("Button press detected: ", button.name)
 	start_selection_animation(button)
@@ -96,7 +96,8 @@ func _input(event):
 
 # Handles resetting all sequence inputs and changes the button icons back to default.
 func reset_inputs():
-	move_sequence = [null, null, null]
+	print("bombaclot test") # apparently this function is never run so idk why we have this
+	move_sequence = [null, null, null, null] # lowkey remove this entire function idk
 	var buttons = get_node("MarginContainer/HBoxContainer/HBoxContainer").get_children()
 	for button in buttons:
 		if button is Button:
