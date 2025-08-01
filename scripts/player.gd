@@ -23,8 +23,17 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("toggle_manual"):  # Press M to toggle manual control
 		manual_control = !manual_control
-		loop_active = false  # Disable loop when switching to manual
 		print("Manual Control:", manual_control)
+		if manual_control:
+			loop_active = false  # Disable loop when switching to manual
+			
+		else: # switching back to automatic (don't disable loop)
+			# simulate an event start (G press)
+			var nextEvent = InputEventAction.new()
+			nextEvent.action = "start_loop"
+			nextEvent.pressed = true
+			moving = false
+			_input(nextEvent)
 
 	elif event.is_action_pressed("start_loop"):  # Press G to start the loop
 		print("Here is the move sequence ", move_sequence)
@@ -50,8 +59,8 @@ func _reset_player_but_save_actions():
 
 	# stop movement, stop loop, reset variables
 	velocity = Vector2.ZERO
-	moving = false
 	loop_active = false
+	moving = false
 	current_step = 0
 	loop_history.clear()
 	update_animation(Vector2.ZERO)
@@ -59,25 +68,41 @@ func _reset_player_but_save_actions():
 	emit_signal("backspace_pressed")
 
 func _physics_process(delta):
-	# --- MANUAL MOVEMENT ---
-	if manual_control:
-		var input_vector := Vector2.ZERO
-		if Input.is_action_pressed("ui_up"):    input_vector.y -= 1
-		if Input.is_action_pressed("ui_down"):  input_vector.y += 1
-		if Input.is_action_pressed("ui_left"):  input_vector.x -= 1
-		if Input.is_action_pressed("ui_right"): input_vector.x += 1
+	# Complete movement and snap to grid
+	if moving:
+		print("I'm still moving ", velocity, delta)
+		var collision = move_and_collide(velocity * delta)
+		
+		if collision:
+			velocity = Vector2.ZERO
+			moving = false
+			current_step = (current_step + 1) % move_sequence.size()
 
-		input_vector = input_vector.normalized()
-		velocity = input_vector * SPEED
-		move_and_slide()
+		elif global_position.distance_to(target_position) < 2.0:
+			global_position = target_position
+			velocity = Vector2.ZERO
+			moving = false
+			current_step = (current_step + 1) % move_sequence.size()
+	
+	# not moving = true; decide next step
+	else: 
+		# --- MANUAL MOVEMENT ---
+		if manual_control:
+			var input_vector := Vector2.ZERO
+			if Input.is_action_pressed("ui_up"):    input_vector.y -= 1
+			if Input.is_action_pressed("ui_down"):  input_vector.y += 1
+			if Input.is_action_pressed("ui_left"):  input_vector.x -= 1
+			if Input.is_action_pressed("ui_right"): input_vector.x += 1
 
-		# Update animation
-		update_animation(input_vector)
-		return  # Prevent loop code from running in manual mode
+			input_vector = input_vector.normalized()
+			velocity = input_vector * SPEED
+			move_and_slide()
 
-	# --- AUTOMATED LOOP MOVEMENT ---
-	if loop_active and move_sequence.size() > 0:
-		if not moving:
+			# Update animation
+			update_animation(input_vector)
+
+		# --- AUTOMATED LOOP MOVEMENT ---
+		elif loop_active and move_sequence.size() > 0:
 			var action = move_sequence[current_step]
 			var dir = Vector2.ZERO
 
@@ -103,22 +128,6 @@ func _physics_process(delta):
 				update_animation(dir)
 				moving = true
 
-	# Complete movement and snap to grid
-	if moving:
-		var collision = move_and_collide(velocity * delta)
-		
-		if collision:
-			velocity = Vector2.ZERO
-			moving = false
-			current_step = (current_step + 1) % move_sequence.size()
-			return
-
-		if global_position.distance_to(target_position) < 2.0:
-			global_position = target_position
-			velocity = Vector2.ZERO
-			moving = false
-			current_step = (current_step + 1) % move_sequence.size()
-
 func _on_move_inputs_updated(new_sequence):
 	move_sequence = new_sequence.duplicate()
 	print("Move sequence updated:", move_sequence)
@@ -129,6 +138,10 @@ func _on_final_move_input_updated(new_sequence):
 	print("Final move inputted, auto-focus running.")
 	_on_move_inputs_updated(new_sequence)
 	
+	# simulate an event start (G press)
+	_press_G_start()
+	
+func _press_G_start():
 	# simulate an event start (G press)
 	var event = InputEventAction.new()
 	event.action = "start_loop"
