@@ -13,7 +13,11 @@ const INPUT_TEXTURES = {
 	"ui_up": "keyboard_arrow_up.png",
 	"ui_down": "keyboard_arrow_down.png",
 	"ui_left": "keyboard_arrow_left.png",
-	"ui_right": "keyboard_arrow_right.png"
+	"ui_right": "keyboard_arrow_right.png",
+	#"ui_up": "keyboard_arrow_up.png",
+	#"ui_down": "keyboard_arrow_down.png",
+	#"ui_left": "keyboard_arrow_left.png",
+	#"ui_right": "keyboard_arrow_right.png"
 }
 
 # Maps to vector directions if needed
@@ -83,7 +87,7 @@ func stop_selection_animation(button: Button):
 func _input(event):
 	if selected_button and event is InputEventKey and event.pressed:
 		for action in INPUT_TEXTURES.keys():
-			if Input.is_action_pressed(action):
+			if event.is_action_pressed(action):
 				var icon_path = "res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/" + INPUT_TEXTURES[action]
 				print("Loading icon: ", icon_path)
 				selected_button.icon = load(icon_path)
@@ -103,10 +107,12 @@ func _input(event):
 						_on_MoveButton_pressed(buttons[index + 1] as Button)
 					else:
 						emit_signal("final_move_input_updated", move_sequence)
-						break
+						return
 				
 				emit_signal("move_inputs_updated", move_sequence)
-				break
+				return
+		if event.is_action_pressed("backspace"):
+			print("bombaclat")
 
 # Handles resetting all sequence inputs and changes the button icons back to default.
 func reset_inputs():
