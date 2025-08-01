@@ -43,7 +43,8 @@ func _ready():
 		_on_MoveButton_pressed(buttons[0] as Button)
 
 func _on_MoveButton_pressed(button: Button):
-	# edge case: if selected button still exists (user did not enter a directional input) then stop flashing it
+	# edge case: if selected button still exists (user did not enter a directional input), then 
+	# stop flashing it.
 	if selected_button and selected_button != button:
 		stop_selection_animation(selected_button)
 	
