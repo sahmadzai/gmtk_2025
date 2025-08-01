@@ -100,6 +100,8 @@ func _physics_process(delta):
 
 			# Update animation
 			update_animation(input_vector)
+			
+			# INFO: manual movement currently doesn't guarantee snapping to grid tile...
 
 		# --- AUTOMATED LOOP MOVEMENT ---
 		elif loop_active and move_sequence.size() > 0:
