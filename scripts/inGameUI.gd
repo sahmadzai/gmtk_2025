@@ -43,8 +43,9 @@ func _ready():
 				print("Failed to connect pressed() signal for: ", button.name)
 
 func _on_MoveButton_pressed(button: Button):
-	# edge case: if a user presses a button, does not make an input, and then presses another button, you need to stop the first button from flashing
-	stop_selection_animation(selected_button)
+	# edge case: if selected button still exists (user did not enter a directional input) then stop flashing it
+	if selected_button and selected_button != button:
+		stop_selection_animation(selected_button)
 	
 	# do normal button things
 	selected_button = button
