@@ -120,12 +120,16 @@ func _input(event):
 
 		# handle backspace
 		if event.is_action_pressed("ui_text_backspace"):
-			var buttons = _get_buttons()
-			var index = buttons.find(selected_button)
-			if index > 0:
-				index -= 1
-			_set_selected_button(buttons[index] as Button)
-			selected_button.icon = DEFAULT_BUTTON_ICON
+			_on_backspace()
+
+func _on_backspace():
+	print("we're inside of on backspace gang")
+	var buttons = _get_buttons()
+	var index = buttons.find(selected_button)
+	if index > 0:
+		index -= 1
+	_set_selected_button(buttons[index] as Button)
+	selected_button.icon = DEFAULT_BUTTON_ICON
 
 # Handles resetting all sequence inputs and changes the button icons back to default.
 func reset_inputs():

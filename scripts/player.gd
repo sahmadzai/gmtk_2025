@@ -1,8 +1,11 @@
 extends CharacterBody2D
 
+signal backspace_pressed
+
 const SPEED = 150.0  # Movement speed of the player
 
 var manual_control := false  # Toggle for manual arrow key movement (debugging)
+var starting_position: Vector2
 var target_position: Vector2
 var moving: bool = false
 var move_sequence := []  # Stores sequence of directions to move in
@@ -18,6 +21,7 @@ var stuck_check := 0
 
 func _ready():
 	print("PLAYER SCRIPT READY")
+	starting_position = global_position # write down the player's initial starting position
 
 func _input(event):
 	if event.is_action_pressed("toggle_manual"):  # Press M to toggle manual control
@@ -36,7 +40,28 @@ func _input(event):
 		stuck_check = 0
 
 	elif event.is_action_pressed("reset_loop"):
-		get_tree().reload_current_scene()  # Press R to reset the level
+		_reset_full_level()  # Press R to reset the level
+
+	elif event.is_action_pressed("ui_text_backspace"):
+		_reset_player_but_save_actions()
+
+func _reset_full_level():
+	get_tree().reload_current_scene()
+
+func _reset_player_but_save_actions():
+	# reset player position to initial
+	global_position = starting_position
+
+	# stop movement, stop loop, reset variables
+	velocity = Vector2.ZERO
+	moving = false
+	loop_active = false
+	current_step = 0
+	loop_history.clear()
+	stuck_check = 0
+	update_animation(Vector2.ZERO)
+	
+	emit_signal("backspace_pressed")
 
 func _physics_process(delta):
 	# --- MANUAL MOVEMENT ---
@@ -99,7 +124,7 @@ func _on_move_inputs_updated(new_sequence):
 # wrapper function for _on_move_inputs_updated
 # used specifically when: 1. should_auto_focus and 2. we have fully populated the sequence list
 func _on_final_move_input_updated(new_sequence):
-	print("reached my custom function")
+	print("Final move inputted, auto-focus running.")
 	_on_move_inputs_updated(new_sequence)
 	
 	# simulate an event start (G press)
