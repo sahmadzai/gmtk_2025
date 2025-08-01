@@ -19,7 +19,7 @@ var stuck_check := 0
 func _ready():
 	print("PLAYER SCRIPT READY")
 
-func _input(event):	
+func _input(event):
 	if event.is_action_pressed("toggle_manual"):  # Press M to toggle manual control
 		manual_control = !manual_control
 		loop_active = false  # Disable loop when switching to manual
