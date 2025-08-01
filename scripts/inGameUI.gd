@@ -97,14 +97,10 @@ func _input(event):
 				selected_button.release_focus()
 				selected_button = null
 				
-				print(index, "ay")
-				print(len(move_sequence)-1, "ya bombaclat")
 				if should_auto_focus:
 					if index < len(move_sequence) - 1:
-						print("taking path 1")
 						_on_MoveButton_pressed(buttons[index + 1] as Button)
 					else:
-						print("taking path 2")
 						emit_signal("final_move_input_updated", move_sequence)
 						break
 				
