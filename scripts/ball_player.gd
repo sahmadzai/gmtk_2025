@@ -208,7 +208,7 @@ func _start_death_animation():
 	# Stop all movement immediately
 	velocity = Vector2.ZERO
 	moving = false
-	update_animation(Vector2.ZERO) # TODO (easy): can we update the animation to a DEATH one? like X_X eyes or something
+	update_animation(Vector2.ZERO, "angry") # TODO (easy): can we update the animation to a DEATH one? like X_X eyes or something
 
 	death_sounds[randi() % len(death_sounds)].play()
 
@@ -244,7 +244,7 @@ func _start_win_animation():
 func _win_animation_next(): # should ONLY be called by _start_win_animation
 	print("Win animation started. Playing transition screen (win next).")
 	#is_dead_animation = false # we're not done yet
-	update_animation(Vector2.ZERO) # TODO (easy): use some smug animation
+	update_animation(Vector2.ZERO, "smug") # TODO (easy): use some smug animation
 	
 	transition_sounds[randi() % len(transition_sounds)].play()
 	
@@ -285,9 +285,17 @@ func _press_R_restart():
 	event.pressed = true
 	_input(event)
 
-func update_animation(input_vector: Vector2) -> void:
+func update_animation(input_vector: Vector2, set_custom : String = "") -> void:
+	if set_custom:
+		if set_custom == "angry":
+			anim.play("angry")
+		elif set_custom == "sad":
+			print("Sad animation not implemented yet.")
+		elif set_custom == "smug":
+			anim.play("smug")
+	
 	# Determine idle animation based on last direction
-	if input_vector == Vector2.ZERO:
+	elif input_vector == Vector2.ZERO:
 		anim.play("idle")
 	else:
 		last_direction = input_vector
