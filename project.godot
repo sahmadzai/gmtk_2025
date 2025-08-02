@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GMTK_2025"
-run/main_scene="uid://cj6t52bxwsta6"
+run/main_scene="uid://bqm8x7y2n3k4l"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
 [input]
