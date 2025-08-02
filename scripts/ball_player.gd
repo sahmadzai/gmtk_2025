@@ -24,6 +24,7 @@ var is_dead_animation = false
 func _ready():
 	print("BALL PLAYER SCRIPT READY")
 	starting_position = global_position # write down the player's initial starting position
+	update_animation(Vector2.ZERO) # idle animation on load-in
 
 func _input(event):
 	if event.is_action_pressed("toggle_manual"):  # Press M to toggle manual control
