@@ -45,11 +45,25 @@ func _ready():
 			button.icon = DEFAULT_BUTTON_ICON
 			button.focus_mode = Control.FOCUS_ALL
 			button.mouse_filter = Control.MOUSE_FILTER_STOP
-			var result = button.pressed.connect(_set_selected_button.bind(button), CONNECT_DEFERRED)
-			if result != OK:
-				print("Failed to connect pressed() signal for: ", button.name)
+			
+			if len(move_sequence) - move_sequence.count(null):
+				# already populated move_sequence means we're coming back in here from an already-shot state
+				# don't re-bind buttons since they're binded already
+				pass
+				
+			else:
+				# bind the buttons when not binded yet
+				var result = button.pressed.connect(_set_selected_button.bind(button), CONNECT_DEFERRED)
+				if result != OK:
+					print("Failed to connect pressed() signal for: ", button.name)
+					
 				
 	if should_auto_focus and not buttons.is_empty():
+		# if we're in here because we're on the 2nd+ shot
+		# reset it, similar to how we're resetting the rendered images to [?]
+		move_sequence.fill(null)
+		
+		# begin auto sequence from the start
 		_set_selected_button(buttons[0] as Button)
 
 # on_MovedButton_pressed --> will be used as a more generic function to set current pressed button
