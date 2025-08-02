@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://fdcufumcdlsm" path="res://scripts/main.gd" id="1_lbhrr"]
 [ext_resource type="Texture2D" uid="uid://bv6qitovh16tu" path="res://assets/kenney_tiny-dungeon/Tilemap/tilemap_packed.png" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://bf78n1pfs1uby" path="res://scenes/inGameUI.tscn" id="3_lnu2h"]
-[ext_resource type="PackedScene" uid="uid://p6txftwmrpeh" path="res://scenes/ball_player.tscn" id="4_iywne"]
-[ext_resource type="Script" uid="uid://bam4sneruv47s" path="res://scripts/ball_player.gd" id="5_p57ef"]
+[ext_resource type="PackedScene" path="res://scenes/ball_player.tscn" id="4_iywne"]
+[ext_resource type="Script" path="res://scripts/ball_player.gd" id="5_p57ef"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")

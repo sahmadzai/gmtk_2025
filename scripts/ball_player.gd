@@ -82,7 +82,6 @@ func _clear_actions_but_keep_position():
 func _physics_process(delta):
 	# Complete movement and snap to grid
 	if moving:
-		print("I'm still moving ", velocity, delta)
 		var collision = move_and_collide(velocity * delta)
 		
 		if collision:
