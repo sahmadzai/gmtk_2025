@@ -17,6 +17,7 @@ var loop_history := []
 var last_direction := Vector2.DOWN  # Used to determine idle animation
 
 @onready var anim = $AnimatedSprite2D  # Reference to AnimatedSprite2D node
+@onready var water_layer = $"../WaterLayer" 
 
 func _ready():
 	print("BALL PLAYER SCRIPT READY")
@@ -82,7 +83,7 @@ func _clear_actions_but_keep_position():
 func _physics_process(delta):
 	# Complete movement and snap to grid
 	if moving:
-		print("I'm still moving ", velocity, delta)
+		print("I'm still moving ", velocity, " ", delta, " and deadly water: ", _is_in_deadly_water(global_position))
 		var collision = move_and_collide(velocity * delta)
 		
 		if collision:
@@ -144,6 +145,16 @@ func _physics_process(delta):
 				velocity = dir * SPEED
 				update_animation(dir)
 				moving = true
+
+# The function to check for the waterDeath property, as discussed previously
+func _is_in_deadly_water(position: Vector2) -> bool:
+	var map_coords = water_layer.local_to_map(position)
+	var tile_data = water_layer.get_cell_tile_data(map_coords) # Assumes WaterLayer is layer 0
+	
+	if tile_data and tile_data.get_custom_data("waterDeath"):
+		return true
+	
+	return false
 
 func _on_move_inputs_updated(new_sequence):
 	move_sequence = new_sequence.duplicate()

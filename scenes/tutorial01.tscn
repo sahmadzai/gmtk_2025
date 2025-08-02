@@ -89,6 +89,8 @@ texture = ExtResource("5_hsj0q")
 
 [sub_resource type="TileSet" id="TileSet_hsj0q"]
 physics_layer_0/collision_layer = 1
+custom_data_layer_0/name = "waterDeath"
+custom_data_layer_0/type = 1
 sources/0 = SubResource("TileSetAtlasSource_hsj0q")
 sources/1 = SubResource("TileSetAtlasSource_23r6w")
 sources/3 = SubResource("TileSetAtlasSource_yq463")
