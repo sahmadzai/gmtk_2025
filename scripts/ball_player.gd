@@ -15,9 +15,11 @@ var loop_active := false
 var current_step := 0
 var loop_history := []
 var last_direction := Vector2.DOWN  # Used to determine idle animation
+var is_dead_animation = false
 
 @onready var anim = $AnimatedSprite2D  # Reference to AnimatedSprite2D node
 @onready var water_layer = $"../WaterLayer" 
+@onready var tween = $Tween
 
 func _ready():
 	print("BALL PLAYER SCRIPT READY")
@@ -81,8 +83,15 @@ func _clear_actions_but_keep_position():
 	emit_signal("actions_list_cleared")
 
 func _physics_process(delta):
+	# if being animated, don't run any other logic
+	if is_dead_animation:
+		return
+
+	# if in deadly water, start death animation
 	if _is_in_deadly_water(global_position):
-		_press_R_restart()
+		print("Player is in deadly water! Starting death animation.")
+		_start_death_animation()
+		return
 	
 	# Complete movement and snap to grid
 	elif moving:
@@ -162,6 +171,29 @@ func _is_in_deadly_water(position: Vector2) -> bool:
 		return true
 	
 	return false
+	
+func _start_death_animation():
+	# don't start another animation if it's already playing
+	if is_dead_animation:
+		return
+
+	# animation is starting now
+	is_dead_animation = true
+	
+	# Stop all movement immediately
+	velocity = Vector2.ZERO
+	moving = false
+	update_animation(Vector2.ZERO)
+
+	var tween_instance = get_tree().create_tween()
+	tween_instance.tween_property(self, "scale", Vector2(0.1, 0.1), 0.5)
+	tween_instance.connect("finished", Callable(self, "_death_animation_finished"))
+
+func _death_animation_finished():
+	print("Death animation finished. Reloading scene.")
+	# animation is done
+	is_dead_animation = false
+	_reset_full_level()
 
 func _on_move_inputs_updated(new_sequence):
 	move_sequence = new_sequence.duplicate()
