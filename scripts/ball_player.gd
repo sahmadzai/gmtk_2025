@@ -19,7 +19,11 @@ var is_dead_animation = false
 
 @onready var anim = $AnimatedSprite2D  # Reference to AnimatedSprite2D node
 @onready var water_layer = $"../WaterLayer" 
+@onready var path_layer = $"../PathLayer" 
 @onready var tween = $Tween
+@onready var death_sounds = [$DeathSound1, $DeathSound2, $DeathSound3]
+@onready var win_sounds = [$WinSound1]
+@onready var transition_sounds = [$TransitionSound1]
 
 func _ready():
 	print("BALL PLAYER SCRIPT READY")
@@ -88,8 +92,14 @@ func _physics_process(delta):
 	if is_dead_animation:
 		return
 
+	# if in the winning hole, start winning animation
+	if _is_in_winning_hole(global_position):
+		print("Player is in winning hole! Starting win animation.")
+		_start_win_animation()
+		return
+
 	# if in deadly water, start death animation
-	if _is_in_deadly_water(global_position):
+	elif _is_in_deadly_water(global_position):
 		print("Player is in deadly water! Starting death animation.")
 		_start_death_animation()
 		return
@@ -159,7 +169,7 @@ func _physics_process(delta):
 				update_animation(dir)
 				moving = true
 
-# The function to check for the waterDeath property, as discussed previously
+# check if we're on deadly water
 func _is_in_deadly_water(position: Vector2) -> bool:
 	if not is_instance_valid(water_layer):
 		print("Water layer was not found, returning false. (Since this is a golf game, why doesn't your level have a water layer?)")
@@ -169,6 +179,20 @@ func _is_in_deadly_water(position: Vector2) -> bool:
 	var tile_data = water_layer.get_cell_tile_data(map_coords) # Assumes WaterLayer is layer 0
 	
 	if tile_data and tile_data.get_custom_data("waterDeath"):
+		return true
+	
+	return false
+	
+# check if we're on deadly water
+func _is_in_winning_hole(position: Vector2) -> bool:
+	if not is_instance_valid(path_layer):
+		print("Path layer was not found, returning false. (Since this is a golf game, why doesn't your level have a path layer?)")
+		return false
+
+	var map_coords = path_layer.local_to_map(position)
+	var tile_data = path_layer.get_cell_tile_data(map_coords) # Assumes WaterLayer is layer 0
+	
+	if tile_data and tile_data.get_custom_data("holeWin"):
 		return true
 	
 	return false
@@ -184,7 +208,9 @@ func _start_death_animation():
 	# Stop all movement immediately
 	velocity = Vector2.ZERO
 	moving = false
-	update_animation(Vector2.ZERO)
+	update_animation(Vector2.ZERO) # TODO (easy): can we update the animation to a DEATH one? like X_X eyes or something
+
+	death_sounds[randi() % len(death_sounds)].play()
 
 	var tween_instance = get_tree().create_tween()
 	tween_instance.tween_property(self, "scale", Vector2(0.1, 0.1), 0.5)
@@ -194,7 +220,43 @@ func _death_animation_finished():
 	print("Death animation finished. Reloading scene.")
 	# animation is done
 	is_dead_animation = false
-	_reset_full_level()
+	_press_R_restart()
+	
+func _start_win_animation():
+	# don't start another animation if it's already playing
+	if is_dead_animation:
+		return
+
+	# animation is starting now
+	is_dead_animation = true
+	
+	# Stop all movement immediately
+	velocity = Vector2.ZERO
+	moving = false
+	update_animation(Vector2.ZERO) # TODO (easy): can we update the animation to a DEATH one? like X_X eyes or something
+
+	win_sounds[randi() % len(win_sounds)].play()
+
+	var tween_instance = get_tree().create_tween()
+	tween_instance.tween_property(self, "scale", Vector2(0.1, 0.1), 0.5)
+	tween_instance.connect("finished", Callable(self, "_win_animation_next"))
+	
+func _win_animation_next(): # should ONLY be called by _start_win_animation
+	print("Win animation started. Playing transition screen (win next).")
+	#is_dead_animation = false # we're not done yet
+	update_animation(Vector2.ZERO) # TODO (easy): use some smug animation
+	
+	transition_sounds[randi() % len(transition_sounds)].play()
+	
+	var tween_instance = get_tree().create_tween()
+	tween_instance.tween_property(self, "scale", Vector2(70.0, 70.0), 2)
+	tween_instance.connect("finished", Callable(self, "_win_animation_finished"))
+	
+func _win_animation_finished():
+	print("Win animation finished. Reloading scene.")
+	# animation is done
+	is_dead_animation = false
+	_press_R_restart()
 
 func _on_move_inputs_updated(new_sequence):
 	move_sequence = new_sequence.duplicate()
