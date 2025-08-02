@@ -1,0 +1,11 @@
+icon.svg.import
+project.godot
+.gitignore
+.godot/
+*.tscn*.tmp
+*.scn.*.tmp
+*.res.*.tmp
+*.tres.*.tmp
+*.gdc.tmp
+*.gen.tmp
+*.DS_Store

@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=4 uid="uid://7th7xuw548go"]
+[gd_scene load_steps=8 format=4 uid="uid://dej4277wlj7xy"]
 
 [ext_resource type="Script" uid="uid://fdcufumcdlsm" path="res://scripts/main.gd" id="1_bte0d"]
 [ext_resource type="Texture2D" uid="uid://bv6qitovh16tu" path="res://assets/kenney_tiny-dungeon/Tilemap/tilemap_packed.png" id="2_vcl2g"]
-[ext_resource type="PackedScene" uid="uid://b72ikftfxj6jx" path="res://scenes/player.tscn" id="3_ywntn"]
 [ext_resource type="PackedScene" uid="uid://bf78n1pfs1uby" path="res://scenes/inGameUI.tscn" id="4_ecfyp"]
+[ext_resource type="PackedScene" uid="uid://p6txftwmrpeh" path="res://scenes/ball_player.tscn" id="4_vcl2g"]
+[ext_resource type="Script" uid="uid://bam4sneruv47s" path="res://scripts/ball_player.gd" id="5_ywntn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_vcl2g")
@@ -167,10 +168,6 @@ position = Vector2(0, 1)
 tile_map_data = PackedByteArray("AAAGAAIAAQAAAAAAAAAHAAIAAQAAAAAAAAAIAAIAAQAAAAAAAAAIAAMAAQAAAAAAAAAIAAQAAQAAAAAAAAAIAAUAAQAAAAAAAAAJAAUAAQAAAAAAAAAKAAUAAQAAAAAAAAAKAAYAAQAAAAAAAAAKAAcAAQAAAAAAAAAKAAgAAQAAAAAAAAALAAgAAQAAAAAAAAAMAAgAAQAAAAAAAAAMAAkAAQAAAAAAAAAMAAoAAQAAAAAAAAAMAAsAAQAEAAMAAAANAAoAAQAAAAAAAAAOAAoAAQAAAAAAAAAOAAkAAQAAAAAAAAAOAAgAAQAAAAAAAAAOAAcAAQAJAAIAAAA=")
 tile_set = SubResource("TileSet_lbhrr")
 
-[node name="Player" parent="." instance=ExtResource("3_ywntn")]
-z_index = 1
-position = Vector2(104, 50)
-
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(192, 108)
 zoom = Vector2(2.8, 2.8)
@@ -185,3 +182,7 @@ offset_left = -21.0
 offset_top = 226.0
 offset_right = -21.0
 offset_bottom = 226.0
+
+[node name="BallPlayer" parent="." instance=ExtResource("4_vcl2g")]
+position = Vector2(104, 41)
+script = ExtResource("5_ywntn")
