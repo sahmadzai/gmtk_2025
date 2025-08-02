@@ -151,6 +151,10 @@ func _physics_process(delta):
 
 # The function to check for the waterDeath property, as discussed previously
 func _is_in_deadly_water(position: Vector2) -> bool:
+	if not is_instance_valid(water_layer):
+		print("Water layer was not found, returning false. (Since this is a golf game, why doesn't your level have a water layer?)")
+		return false
+
 	var map_coords = water_layer.local_to_map(position)
 	var tile_data = water_layer.get_cell_tile_data(map_coords) # Assumes WaterLayer is layer 0
 	
