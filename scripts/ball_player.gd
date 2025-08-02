@@ -15,8 +15,11 @@ var loop_active := false
 var current_step := 0
 var loop_history := []
 var last_direction := Vector2.DOWN  # Used to determine idle animation
+var is_dead_animation = false
 
 @onready var anim = $AnimatedSprite2D  # Reference to AnimatedSprite2D node
+@onready var water_layer = $"../WaterLayer" 
+@onready var tween = $Tween
 
 func _ready():
 	print("BALL PLAYER SCRIPT READY")
@@ -80,9 +83,19 @@ func _clear_actions_but_keep_position():
 	emit_signal("actions_list_cleared")
 
 func _physics_process(delta):
+	# if being animated, don't run any other logic
+	if is_dead_animation:
+		return
+
+	# if in deadly water, start death animation
+	if _is_in_deadly_water(global_position):
+		print("Player is in deadly water! Starting death animation.")
+		_start_death_animation()
+		return
+	
 	# Complete movement and snap to grid
-	if moving:
-		print("I'm still moving ", velocity, delta)
+	elif moving:
+		print("I'm still moving ", velocity, " ", delta, " and deadly water: ", _is_in_deadly_water(global_position))
 		var collision = move_and_collide(velocity * delta)
 		
 		if collision:
@@ -145,6 +158,43 @@ func _physics_process(delta):
 				update_animation(dir)
 				moving = true
 
+# The function to check for the waterDeath property, as discussed previously
+func _is_in_deadly_water(position: Vector2) -> bool:
+	if not is_instance_valid(water_layer):
+		print("Water layer was not found, returning false. (Since this is a golf game, why doesn't your level have a water layer?)")
+		return false
+
+	var map_coords = water_layer.local_to_map(position)
+	var tile_data = water_layer.get_cell_tile_data(map_coords) # Assumes WaterLayer is layer 0
+	
+	if tile_data and tile_data.get_custom_data("waterDeath"):
+		return true
+	
+	return false
+	
+func _start_death_animation():
+	# don't start another animation if it's already playing
+	if is_dead_animation:
+		return
+
+	# animation is starting now
+	is_dead_animation = true
+	
+	# Stop all movement immediately
+	velocity = Vector2.ZERO
+	moving = false
+	update_animation(Vector2.ZERO)
+
+	var tween_instance = get_tree().create_tween()
+	tween_instance.tween_property(self, "scale", Vector2(0.1, 0.1), 0.5)
+	tween_instance.connect("finished", Callable(self, "_death_animation_finished"))
+
+func _death_animation_finished():
+	print("Death animation finished. Reloading scene.")
+	# animation is done
+	is_dead_animation = false
+	_reset_full_level()
+
 func _on_move_inputs_updated(new_sequence):
 	move_sequence = new_sequence.duplicate()
 	print("Move sequence updated:", move_sequence)
@@ -162,6 +212,13 @@ func _press_G_start():
 	# simulate an event start (G press)
 	var event = InputEventAction.new()
 	event.action = "start_loop"
+	event.pressed = true
+	_input(event)
+	
+func _press_R_restart():
+	# simulate an event start (G press)
+	var event = InputEventAction.new()
+	event.action = "reset_loop"
 	event.pressed = true
 	_input(event)
 
