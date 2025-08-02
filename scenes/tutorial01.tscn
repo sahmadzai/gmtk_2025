@@ -1,12 +1,12 @@
 [gd_scene load_steps=7 format=4 uid="uid://cne6wv4uog7xn"]
 
-[ext_resource type="Script" uid="uid://fdcufumcdlsm" path="res://scripts/main.gd" id="1_uccuh"]
-[ext_resource type="Texture2D" uid="uid://bv6qitovh16tu" path="res://assets/kenney_tiny-dungeon/Tilemap/tilemap_packed.png" id="2_jol72"]
-[ext_resource type="PackedScene" uid="uid://b72ikftfxj6jx" path="res://scenes/player.tscn" id="3_sps47"]
-[ext_resource type="PackedScene" uid="uid://bf78n1pfs1uby" path="res://scenes/inGameUI.tscn" id="4_it2tc"]
+[ext_resource type="Script" uid="uid://fdcufumcdlsm" path="res://scripts/main.gd" id="1_u5bx2"]
+[ext_resource type="Texture2D" uid="uid://bv6qitovh16tu" path="res://assets/kenney_tiny-dungeon/Tilemap/tilemap_packed.png" id="2_npq7i"]
+[ext_resource type="PackedScene" uid="uid://b72ikftfxj6jx" path="res://scenes/player.tscn" id="3_hskvp"]
+[ext_resource type="PackedScene" uid="uid://bf78n1pfs1uby" path="res://scenes/inGameUI.tscn" id="4_hsj0q"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
-texture = ExtResource("2_jol72")
+texture = ExtResource("2_npq7i")
 0:0/0 = 0
 1:0/0 = 0
 1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, 8, 1.83006, 8, 1.73114, 0.494612, 8, 0.791378)
@@ -159,7 +159,7 @@ physics_layer_0/collision_layer = 1
 sources/1 = SubResource("TileSetAtlasSource_lnu2h")
 
 [node name="Node2D" type="Node2D"]
-script = ExtResource("1_uccuh")
+script = ExtResource("1_u5bx2")
 
 [node name="TileMap" type="TileMapLayer" parent="."]
 use_parent_material = true
@@ -167,7 +167,7 @@ position = Vector2(0, 1)
 tile_map_data = PackedByteArray("AAAFAAYAAQAAAAIAAAAGAAYAAQAAAAAAAAAHAAYAAQAAAAAAAAAIAAYAAQAAAAAAAAAJAAYAAQAAAAEAAAAKAAYAAQAAAAEAAAAPAAYAAQAAAAAAAAALAAYAAQAAAAAAAAAMAAYAAQAAAAAAAAANAAYAAQAAAAAAAAAOAAYAAQAAAAEAAAASAAYAAQAJAAIAAAAQAAYAAQAAAAAAAAARAAYAAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_lbhrr")
 
-[node name="Player" parent="." instance=ExtResource("3_sps47")]
+[node name="Player" parent="." instance=ExtResource("3_hskvp")]
 z_index = 1
 position = Vector2(88, 113)
 
@@ -176,7 +176,7 @@ position = Vector2(192, 108)
 zoom = Vector2(2.8, 2.8)
 process_callback = 0
 
-[node name="inGameUI" parent="." instance=ExtResource("4_it2tc")]
+[node name="inGameUI" parent="." instance=ExtResource("4_hsj0q")]
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0

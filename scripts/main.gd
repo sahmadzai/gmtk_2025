@@ -6,3 +6,4 @@ func _ready():
 	ui.connect("move_inputs_updated", Callable(player, "_on_move_inputs_updated"))
 	ui.connect("final_move_input_updated", Callable(player, "_on_final_move_input_updated"))
 	player.connect("backspace_pressed", Callable(ui, "_on_backspace"))
+	player.connect("actions_list_cleared", Callable(ui, "_ready"))

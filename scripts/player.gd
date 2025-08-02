@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 signal backspace_pressed
+signal actions_list_cleared
+
 
 const SPEED = 50.0  # Movement speed of the player
 
@@ -63,6 +65,19 @@ func _reset_player_but_save_actions():
 	update_animation(Vector2.ZERO)
 	
 	emit_signal("backspace_pressed")
+	
+func _clear_actions_but_keep_position():
+	# stop loop, stop movement, reset variables
+	loop_active = false
+	moving = false # (should already be false if we're at collision, this line should be redundant) 
+	move_sequence.clear()
+	current_step = 0
+	loop_history.clear()
+	update_animation(Vector2.ZERO)
+
+	print("Actions list cleared, player position unchanged.")
+
+	emit_signal("actions_list_cleared")
 
 func _physics_process(delta):
 	# Complete movement and snap to grid
@@ -120,6 +135,9 @@ func _physics_process(delta):
 				moving = false
 				update_animation(Vector2.ZERO)
 				current_step = (current_step + 1) % move_sequence.size()
+				
+				# next golf shot
+				_clear_actions_but_keep_position()
 			else:
 				print("Moving to next tile.")
 				target_position = new_target
