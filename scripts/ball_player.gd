@@ -4,7 +4,7 @@ signal backspace_pressed
 signal actions_list_cleared
 
 
-const SPEED = 150.0  # Movement speed of the player
+const SPEED = 125.0  # Movement speed of the player
 
 var manual_control := false  # Toggle for manual arrow key movement (debugging)
 var starting_position: Vector2
@@ -18,12 +18,10 @@ var last_direction := Vector2.DOWN  # Used to determine idle animation
 
 @onready var anim = $AnimatedSprite2D  # Reference to AnimatedSprite2D node
 @onready var water_layer = $"../WaterLayer" 
-#@onready var tween = $Tween
 
 func _ready():
 	print("BALL PLAYER SCRIPT READY")
 	starting_position = global_position # write down the player's initial starting position
-	update_animation(Vector2.ZERO)
 
 func _input(event):
 	if event.is_action_pressed("toggle_manual"):  # Press M to toggle manual control
@@ -83,10 +81,7 @@ func _clear_actions_but_keep_position():
 	emit_signal("actions_list_cleared")
 
 func _physics_process(delta):
-	# if you're in deadly water, immediately end the game
-	
 	if _is_in_deadly_water(global_position):
-		#_start_death_animation()
 		_press_R_restart()
 	
 	# Complete movement and snap to grid
@@ -154,28 +149,15 @@ func _physics_process(delta):
 				update_animation(dir)
 				moving = true
 
-# The function to check for the waterDeath property.
+# The function to check for the waterDeath property, as discussed previously
 func _is_in_deadly_water(position: Vector2) -> bool:
-	# Convert the world position to the TileMapLayer's grid coordinates
 	var map_coords = water_layer.local_to_map(position)
+	var tile_data = water_layer.get_cell_tile_data(map_coords) # Assumes WaterLayer is layer 0
 	
-	# Get the tile data from the layer using the map coordinates
-	var tile_data = water_layer.get_cell_tile_data(map_coords)
-	
-	# Check if the custom data "waterDeath" is present and is true.
 	if tile_data and tile_data.get_custom_data("waterDeath"):
 		return true
 	
 	return false
-	
-#func _start_death_animation():
-	## if already active, don't do anything
-	#if tween.is_active():
-		#return
-#
-	## scale very small via seconds
-	#tween.tween_property(self, "scale", Vector2(0.1, 0.1), 0.5)
-	#tween.connect("finished", Callable(self, "_on_death_animation_finished"))
 
 func _on_move_inputs_updated(new_sequence):
 	move_sequence = new_sequence.duplicate()
@@ -198,7 +180,7 @@ func _press_G_start():
 	_input(event)
 	
 func _press_R_restart():
-	# simulate a level restart (R press)
+	# simulate an event start (G press)
 	var event = InputEventAction.new()
 	event.action = "reset_loop"
 	event.pressed = true
