@@ -4,7 +4,7 @@ signal backspace_pressed
 signal actions_list_cleared
 
 
-const SPEED = 50.0  # Movement speed of the player
+const SPEED = 125.0  # Movement speed of the player
 
 var manual_control := false  # Toggle for manual arrow key movement (debugging)
 var starting_position: Vector2
