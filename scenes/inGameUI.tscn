@@ -37,10 +37,9 @@ layout_mode = 2
 theme_override_constants/separation = 100
 
 [node name="InputsContainer" type="HBoxContainer" parent="MarginContainer/BottomRow"]
-custom_minimum_size = Vector2(10, 10)
+clip_contents = true
+custom_minimum_size = Vector2(353, 50)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/BottomRow/InputsContainer"]
@@ -49,18 +48,9 @@ text = "INPUT(S):"
 label_settings = SubResource("LabelSettings_qditl")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/BottomRow/InputsContainer"]
-layout_mode = 2
-
-[node name="UserInputBtn0" type="Button" parent="MarginContainer/BottomRow/InputsContainer/HBoxContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(266, 50)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-icon = ExtResource("2_fn3r6")
-flat = true
-icon_alignment = 1
-expand_icon = true
 
 [node name="UserInputBtn1" type="Button" parent="MarginContainer/BottomRow/InputsContainer/HBoxContainer"]
 clip_contents = true
@@ -74,6 +64,39 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="UserInputBtn2" type="Button" parent="MarginContainer/BottomRow/InputsContainer/HBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = ExtResource("2_fn3r6")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="UserInputBtn3" type="Button" parent="MarginContainer/BottomRow/InputsContainer/HBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = ExtResource("2_fn3r6")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="UserInputBtn4" type="Button" parent="MarginContainer/BottomRow/InputsContainer/HBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = ExtResource("2_fn3r6")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="UserInputBtn5" type="Button" parent="MarginContainer/BottomRow/InputsContainer/HBoxContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2

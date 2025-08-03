@@ -27,5 +27,16 @@ var level_progression := {
 	"level4": "res://scenes/credits.tscn"
 }
 
+# Dictionary mapping of how many input‐buttons each level has
+var max_inputs := {
+	"tutorial01": 1,
+	"tutorial02": 4,
+	"tutorial03": 5,
+	"level1":     6,
+	"level2":     6,
+	"level3":     7,
+	"level4":     8,
+}
+
 func get_next_scene_path(current_scene_name: String) -> String:
 	return level_progression.get(current_scene_name, "res://scenes/tutorial01.tscn")

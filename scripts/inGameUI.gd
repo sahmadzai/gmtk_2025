@@ -23,57 +23,59 @@ var should_auto_focus = true
 var shot_count: int = 0
 @onready var shot_count_label: Label = $"MarginContainer/BottomRow/ShotCount/ShotCount"
 
-func _get_buttons():
-	return get_node("MarginContainer/BottomRow/InputsContainer/HBoxContainer").get_children()
+func _get_buttons() -> Array:
+	# only return the visible, enabled buttons
+	return get_node("MarginContainer/BottomRow/InputsContainer/HBoxContainer").get_children().filter(
+		func(b):
+			return (b is Button) and b.visible and not b.disabled
+	)
 
 func _ready():
 	print("INGAMEUI SCRIPT READY")
-	
-	# --- runtime constants --- (so we don't have to load() a million times elsewhere)
+	# load textures…
 	INPUT_TEXTURES = {
-		"ui_up":          load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_arrow_up.png"),
-		"ui_down":        load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_arrow_down.png"),
-		"ui_left":        load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_arrow_left.png"),
-		"ui_right":       load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_arrow_right.png"),
+		"ui_up":    load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_arrow_up.png"),
+		"ui_down":  load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_arrow_down.png"),
+		"ui_left":  load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_arrow_left.png"),
+		"ui_right": load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_arrow_right.png"),
 	}
 	DEFAULT_BUTTON_ICON = load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_question_outline.png")
-	
-	# --- setup ---
-		
-	# show the persisted count
-	shot_count_label.text = "%d" % GameState.shot_count
-	
-	# bump the counter each time the user inputs a move sequence
-	connect("final_move_input_updated", Callable(self, "_on_shot_fired"))
-	
-	var buttons = _get_buttons()         # grabs the number of buttons that are in the scene tree
-	move_sequence.resize(buttons.size()) # resizes the internal move sequence counter based on the number of buttons grabbed from the scene tree
 
-	for button in buttons:
-		if button is Button:
-			button.icon = DEFAULT_BUTTON_ICON
-			button.focus_mode = Control.FOCUS_ALL
-			button.mouse_filter = Control.MOUSE_FILTER_STOP
-			
-			if len(move_sequence) - move_sequence.count(null):
-				# already populated move_sequence means we're coming back in here from an already-shot state
-				# don't re-bind buttons since they're binded already
-				pass
-				
+	# show persisted shot count
+	shot_count_label.text = "%d" % GameState.shot_count
+	connect("final_move_input_updated", Callable(self, "_on_shot_fired"))
+
+	# determine how many inputs this level needs
+	var scene_name = get_tree().current_scene.scene_file_path.get_file().get_basename()
+	var max = GameState.max_inputs.get(scene_name, 5)  # fallback = 5
+
+	# hide/disable the extras
+	var all_buttons = get_node("MarginContainer/BottomRow/InputsContainer/HBoxContainer").get_children()
+	for i in range(all_buttons.size()):
+		var b = all_buttons[i]
+		if b is Button:
+			if i < max:
+				b.visible = true
+				b.disabled = false
 			else:
-				# bind the buttons when not binded yet
-				var result = button.pressed.connect(_set_selected_button.bind(button), CONNECT_DEFERRED)
-				if result != OK:
-					print("Failed to connect pressed() signal for: ", button.name)
-					
-				
-	if should_auto_focus and not buttons.is_empty():
-		# if we're in here because we're on the 2nd+ shot
-		# reset it, similar to how we're resetting the rendered images to [?]
+				b.visible = false
+				b.disabled = true
+
+	# now grab only the active ones
+	var buttons = _get_buttons()
+	move_sequence.resize(buttons.size())
+
+	# initialize each visible button
+	for b in buttons:
+		b.icon = DEFAULT_BUTTON_ICON
+		b.focus_mode = Control.FOCUS_ALL
+		b.mouse_filter = Control.MOUSE_FILTER_STOP
+		b.pressed.connect(_set_selected_button.bind(b), CONNECT_DEFERRED)
+
+	# auto-focus first
+	if should_auto_focus and buttons.size() > 0:
 		move_sequence.fill(null)
-		
-		# begin auto sequence from the start
-		_set_selected_button(buttons[0] as Button)
+		_set_selected_button(buttons[0])
 
 # on_MovedButton_pressed --> will be used as a more generic function to set current pressed button
 func _set_selected_button(button: Button):
