@@ -570,8 +570,8 @@ animations = [{
 "speed": 12.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_e1dit"]
-radius = 7.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ea6qr"]
+size = Vector2(16, 16)
 
 [node name="BallPlayer" type="CharacterBody2D"]
 
@@ -581,4 +581,4 @@ sprite_frames = SubResource("SpriteFrames_xfnga")
 animation = &"smug"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_e1dit")
+shape = SubResource("RectangleShape2D_ea6qr")
