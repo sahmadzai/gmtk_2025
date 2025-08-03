@@ -24,6 +24,7 @@ var is_dead_animation = false
 @onready var death_sounds = [$DeathSound1, $DeathSound2, $DeathSound3]
 @onready var win_sounds = [$WinSound1]
 @onready var transition_sounds = [$TransitionSound1]
+@onready var wall_sounds = [$WallSound1]
 
 func _ready():
 	print("BALL PLAYER SCRIPT READY")
@@ -86,6 +87,17 @@ func _clear_actions_but_keep_position():
 	print("Actions list cleared, player position unchanged.")
 
 	emit_signal("actions_list_cleared")
+	
+func _hit_wall_sound_and_shake():
+	
+	wall_sounds[randi() % len(wall_sounds)].play()
+			
+	var camera = get_parent().get_node("Camera2D")
+
+	# Check if the camera node exists before trying to call the function
+	if is_instance_valid(camera):
+		# Call the screen shake function with a duration and strength
+		camera.start_shake(0.3, 8)
 
 func _physics_process(delta):
 	# if being animated, don't run any other logic
@@ -113,7 +125,8 @@ func _physics_process(delta):
 			velocity = Vector2.ZERO
 			moving = false
 			current_step = (current_step + 1) % move_sequence.size()
-
+			# wall hit sound will play before next turn starts
+			
 		elif global_position.distance_to(target_position) < 2.0:
 			global_position = target_position
 			velocity = Vector2.ZERO
@@ -162,6 +175,7 @@ func _physics_process(delta):
 				
 				# next golf shot
 				_clear_actions_but_keep_position()
+				_hit_wall_sound_and_shake()
 			else:
 				print("Moving to next tile.")
 				target_position = new_target
