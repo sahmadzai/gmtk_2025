@@ -29,6 +29,7 @@ var is_dead_animation = false
 func _ready():
 	print("BALL PLAYER SCRIPT READY")
 	starting_position = global_position # write down the player's initial starting position
+	print("the starting position is ", starting_position)
 	update_animation(Vector2.ZERO) # idle animation on load-in
 	
 	if GameState.was_win_transition:
