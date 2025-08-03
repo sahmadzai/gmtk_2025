@@ -1,9 +1,10 @@
-[gd_scene load_steps=18 format=4 uid="uid://chgmi81axtrp1"]
+[gd_scene load_steps=19 format=4 uid="uid://chgmi81axtrp1"]
 
 [ext_resource type="Script" uid="uid://fdcufumcdlsm" path="res://scripts/main.gd" id="1_u5bx2"]
 [ext_resource type="Texture2D" uid="uid://6cu8nm4u2o8i" path="res://assets/golf_tileset/OutdoorsTileset.png" id="3_npq7i"]
 [ext_resource type="PackedScene" uid="uid://bf78n1pfs1uby" path="res://scenes/inGameUI.tscn" id="4_hsj0q"]
 [ext_resource type="Texture2D" uid="uid://cxwlw864r4uro" path="res://assets/golf_tileset/hole.png" id="4_hskvp"]
+[ext_resource type="Script" uid="uid://bwbi4j4edpwhs" path="res://scripts/camera_shake.gd" id="5_3ls8x"]
 [ext_resource type="Texture2D" uid="uid://paxoa2xfdiu8" path="res://assets/golf_tileset/animated_water.png" id="5_hsj0q"]
 [ext_resource type="AudioStream" uid="uid://dabn6wdx6y0yj" path="res://assets/audio_sounds/drip.mp3" id="7_23r6w"]
 [ext_resource type="PackedScene" uid="uid://p6txftwmrpeh" path="res://scenes/ball_player.tscn" id="8_23r6w"]
@@ -129,6 +130,7 @@ tile_set = SubResource("TileSet_hsj0q")
 anchor_mode = 0
 zoom = Vector2(3, 3)
 process_callback = 0
+script = ExtResource("5_3ls8x")
 
 [node name="inGameUI" parent="." instance=ExtResource("4_hsj0q")]
 anchors_preset = 6

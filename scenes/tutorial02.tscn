@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://by7viw8nvjhc2"]
+[gd_scene load_steps=19 format=4 uid="uid://by7viw8nvjhc2"]
 
 [ext_resource type="Script" uid="uid://fdcufumcdlsm" path="res://scripts/main.gd" id="1_uccuh"]
 [ext_resource type="Texture2D" uid="uid://6cu8nm4u2o8i" path="res://assets/golf_tileset/OutdoorsTileset.png" id="2_it2tc"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://p6txftwmrpeh" path="res://scenes/ball_player.tscn" id="4_jol72"]
 [ext_resource type="Texture2D" uid="uid://paxoa2xfdiu8" path="res://assets/golf_tileset/animated_water.png" id="4_jsqv3"]
 [ext_resource type="Script" uid="uid://bam4sneruv47s" path="res://scripts/ball_player.gd" id="5_sps47"]
+[ext_resource type="Script" uid="uid://bwbi4j4edpwhs" path="res://scripts/camera_shake.gd" id="5_t75r2"]
 [ext_resource type="AudioStream" uid="uid://dabn6wdx6y0yj" path="res://assets/audio_sounds/drip.mp3" id="8_v67rb"]
 [ext_resource type="AudioStream" uid="uid://tysma0ppy3bg" path="res://assets/audio_sounds/blub.mp3" id="9_5xkst"]
 [ext_resource type="AudioStream" uid="uid://tq0i5kx7at5l" path="res://assets/audio_sounds/splash.mp3" id="10_t75r2"]
@@ -128,6 +129,7 @@ tile_set = SubResource("TileSet_5xkst")
 anchor_mode = 0
 zoom = Vector2(3, 3)
 process_callback = 0
+script = ExtResource("5_t75r2")
 
 [node name="inGameUI" parent="." instance=ExtResource("4_it2tc")]
 anchors_preset = 14
