@@ -1,8 +1,10 @@
+assets/*
 !assets/.keep
 icon.svg.import
 .gitignore
 .gitattributes
 .editorconfig
+project.gdot
 .godot/
 *.tscn*.tmp
 *.scn.*.tmp
