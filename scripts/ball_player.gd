@@ -118,9 +118,8 @@ func _hit_wall_sound_and_shake():
 	wall_sounds[randi() % len(wall_sounds)].play()
 	var camera = get_parent().get_node("Camera2D")
 
-	# Check if the camera node exists before trying to call the function
 	if is_instance_valid(camera):
-		# Call the screen shake function with a duration and strength
+		# duration, strength
 		camera.start_shake(0.3, 8)
 
 func _physics_process(delta):
@@ -154,6 +153,9 @@ func _physics_process(delta):
 			moving = false
 			current_step = (current_step + 1) % move_sequence.size()
 			# wall hit sound will play before next turn starts
+			
+			_clear_actions_but_keep_position()
+			_hit_wall_sound_and_shake()
 			
 		elif global_position.distance_to(target_position) < 2.0:
 			global_position = target_position
