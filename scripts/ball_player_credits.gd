@@ -1,8 +1,3 @@
-# File: CreditsBallPlayer.gd
-# Description: Simple player controller for the infinite credits map.
-#              Supports manual 4-way movement & facing animations.
-# Author: (you)
-
 extends CharacterBody2D
 
 const SPEED := 800.0  # Movement speed in credits screen
@@ -21,12 +16,12 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("ui_up"):
 		input_vec.y -= 1
 
-	# Normalize and move
 	input_vec = input_vec.normalized()
 	velocity = input_vec * SPEED
+
+	# Move and check for collisions
 	move_and_slide()
 
-	# Update animation
 	_update_animation(input_vec)
 
 func _update_animation(dir: Vector2) -> void:
