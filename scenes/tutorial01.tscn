@@ -14,7 +14,7 @@
 [ext_resource type="AudioStream" uid="uid://ckreaonq78xrx" path="res://assets/audio_sounds/goku.mp3" id="11_j54qh"]
 [ext_resource type="AudioStream" uid="uid://b55f1kv5gg1s5" path="res://assets/audio_sounds/bonk.mp3" id="12_i2b7d"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hsj0q"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i2b7d"]
 texture = ExtResource("3_npq7i")
 0:0/0 = 0
 1:0/0 = 0
@@ -81,12 +81,12 @@ texture = ExtResource("3_npq7i")
 5:8/0 = 0
 5:8/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_23r6w"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3ls8x"]
 texture = ExtResource("4_hskvp")
 0:0/0 = 0
 0:0/0/custom_data_1 = true
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yq463"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c5lo6"]
 texture = ExtResource("5_hsj0q")
 0:0/animation_columns = 5
 0:0/animation_frame_0/duration = 0.3
@@ -102,9 +102,9 @@ custom_data_layer_0/name = "waterDeath"
 custom_data_layer_0/type = 1
 custom_data_layer_1/name = "holeWin"
 custom_data_layer_1/type = 1
-sources/0 = SubResource("TileSetAtlasSource_hsj0q")
-sources/1 = SubResource("TileSetAtlasSource_23r6w")
-sources/3 = SubResource("TileSetAtlasSource_yq463")
+sources/0 = SubResource("TileSetAtlasSource_i2b7d")
+sources/1 = SubResource("TileSetAtlasSource_3ls8x")
+sources/3 = SubResource("TileSetAtlasSource_c5lo6")
 
 [node name="Node2D2" type="Node2D"]
 script = ExtResource("1_u5bx2")

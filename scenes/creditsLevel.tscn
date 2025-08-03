@@ -1,0 +1,30 @@
+[gd_scene load_steps=7 format=3 uid="uid://dgyvf611syvoe"]
+
+[ext_resource type="Script" uid="uid://mwl8l3qqtr4k" path="res://scenes/creditsRoot.gd" id="1_eby6o"]
+[ext_resource type="PackedScene" uid="uid://bt56s085h0ijm" path="res://scenes/creditSegmentA.tscn" id="1_yma2o"]
+[ext_resource type="PackedScene" uid="uid://b378ewcv1nrx6" path="res://scenes/creditSegmentB.tscn" id="2_wq1sj"]
+[ext_resource type="PackedScene" uid="uid://bw2i4gdpnd3nw" path="res://scenes/creditSegmentC.tscn" id="3_eby6o"]
+[ext_resource type="PackedScene" uid="uid://p6txftwmrpeh" path="res://scenes/ball_player.tscn" id="4_wq1sj"]
+[ext_resource type="Script" uid="uid://dabri4gd04fq0" path="res://scripts/ball_player_credits.gd" id="6_wjm7c"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_eby6o")
+
+[node name="SegmentA" parent="." instance=ExtResource("1_yma2o")]
+position = Vector2(3, 4)
+
+[node name="SegmentB" parent="." instance=ExtResource("2_wq1sj")]
+position = Vector2(1152, 4)
+
+[node name="SegmentC" parent="." instance=ExtResource("3_eby6o")]
+position = Vector2(2304, 4)
+
+[node name="BallPlayer" parent="." instance=ExtResource("4_wq1sj")]
+position = Vector2(554, 315)
+scale = Vector2(3, 3)
+script = ExtResource("6_wjm7c")
+
+[node name="Camera2D" type="Camera2D" parent="BallPlayer"]
+position = Vector2(-184.667, -105)
+scale = Vector2(0.333333, 0.333333)
+anchor_mode = 0
