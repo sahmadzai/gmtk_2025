@@ -111,7 +111,7 @@ grow_vertical = 2
 
 [node name="GameOverLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "GAME OVER"
+text = "YOU WIN"
 label_settings = SubResource("LabelSettings_game_over")
 horizontal_alignment = 1
 
@@ -127,7 +127,8 @@ horizontal_alignment = 1
 
 [node name="SubtitleLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "Better luck next time, golfer!"
+text = "GMTK Game Jam 2025
+Our first game"
 label_settings = SubResource("LabelSettings_subtitle")
 horizontal_alignment = 1
 
