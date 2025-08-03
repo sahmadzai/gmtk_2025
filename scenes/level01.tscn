@@ -106,7 +106,7 @@ sources/0 = SubResource("TileSetAtlasSource_i2b7d")
 sources/1 = SubResource("TileSetAtlasSource_3ls8x")
 sources/3 = SubResource("TileSetAtlasSource_c5lo6")
 
-[node name="Node2D2" type="Node2D"]
+[node name="Node2D3" type="Node2D"]
 script = ExtResource("1_gkrsa")
 
 [node name="WaterLayer" type="TileMapLayer" parent="."]
