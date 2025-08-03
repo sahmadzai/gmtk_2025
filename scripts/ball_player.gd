@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 signal backspace_pressed
 signal actions_list_cleared
+signal move_started(index : int)
 
 
 const SPEED = 125.0  # Movement speed of the player
@@ -220,6 +221,7 @@ func _physics_process(delta):
 				target_position = new_target
 				velocity = dir * SPEED
 				update_animation(dir)
+				emit_signal("move_started", current_step)
 				moving = true
 
 # check if we're on deadly water
@@ -295,7 +297,7 @@ func _start_win_animation():
 	GameState.next_scene_path = GameState.get_next_scene_path(current_scene)
 
 	var tween_instance = get_tree().create_tween()
-	tween_instance.tween_property(self, "scale", Vector2(0.1, 0.1), 0.5)
+	tween_instance.tween_property(self, "scale", Vector2(0.1, 0.1), 0.1)
 	tween_instance.connect("finished", Callable(self, "_win_animation_next"))
 	
 func _win_animation_next(): # should ONLY be called by _start_win_animation

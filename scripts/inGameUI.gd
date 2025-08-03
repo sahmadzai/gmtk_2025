@@ -67,6 +67,7 @@ func _ready():
 
 	# initialize each visible button
 	for b in buttons:
+		b.pivot_offset = b.size * 0.5 # make all transforms originate from the center
 		b.icon = DEFAULT_BUTTON_ICON
 		b.focus_mode = Control.FOCUS_ALL
 		b.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -160,6 +161,45 @@ func _on_backspace():
 func _on_shot_fired(_move_sequence):
 	GameState.shot_count += 1
 	shot_count_label.text = "%d" % GameState.shot_count
+	
+func _on_move_started(idx: int) -> void:
+	var buttons = _get_buttons()
+	# if there's exactly one button, only pulse its scale (no slide)
+	if buttons.size() == 1:
+		var b = buttons[0]
+		
+		# kill any old tween
+		if tween_map.has(!b):
+			tween_map[b].kill()
+			tween_map.erase(b)
+		else:
+			# create a looping scale tween
+			var t = create_tween()
+			t.set_loops()
+			t.set_trans(Tween.TRANS_SINE)
+			t.set_ease(Tween.EASE_IN_OUT)
+			t.tween_property(b, "scale", Vector2(1.3, 1.3), 0.15)
+			t.tween_property(b, "scale", Vector2(1, 1), 0.15).set_delay(0.15)
+			tween_map[b] = t
+		return
+
+	# otherwise 2+ buttons, do slide+scale as before
+	if idx < 0 or idx >= buttons.size():
+		return
+	var b = buttons[idx]
+	if tween_map.has(b):
+		tween_map[b].kill()
+		tween_map.erase(b)
+
+	var orig_pos = b.position
+	var t = create_tween()
+	# slide up & scale up
+	t.parallel().tween_property(b, "position:y", orig_pos.y - 6, 0.15)
+	t.parallel().tween_property(b, "scale",      Vector2(1.3,1.3),   0.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	# slide back & scale back
+	t.parallel().tween_property(b, "position:y", orig_pos.y,       0.15).set_delay(0.15)
+	t.parallel().tween_property(b, "scale",      Vector2(1,1),       0.15).set_delay(0.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween_map[b] = t
 
 # Handles resetting all sequence inputs and changes the button icons back to default.
 func reset_inputs():

@@ -8,7 +8,7 @@ var shot_count: int = 0
 var level_start_positions := {
 	"tutorial01": Vector2(88, 104),
 	"tutorial02": Vector2(136, 40),
-	"tutorial03": Vector2(104, 40),
+	"tutorial03": Vector2(95, 48),
 	"level01": Vector2(104, 88),
 	"level02": Vector2(88, 152),
 	"level03": Vector2(152, 104),
