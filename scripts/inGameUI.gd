@@ -40,10 +40,15 @@ func _ready():
 	
 	# --- setup ---
 	
-	# initialize shot count
-	shot_count = 0
-	shot_count_label.text = "%d" % shot_count
-	# connect our own “final” signal so we can bump the counter
+	# reset shot count on first level only (non-tutorial)
+	var scene_name = get_tree().current_scene.scene_file_path.get_file().get_basename()
+	if scene_name == "level1":
+		GameState.shot_count = 0
+	
+	# show the persisted count
+	shot_count_label.text = "%d" % GameState.shot_count
+	
+	# bump the counter each time the user inputs a move sequence
 	connect("final_move_input_updated", Callable(self, "_on_shot_fired"))
 	
 	var buttons = _get_buttons()         # grabs the number of buttons that are in the scene tree
@@ -156,8 +161,8 @@ func _on_backspace():
 
 # called when the user has filled out the entire move_sequence
 func _on_shot_fired(_move_sequence):
-	shot_count += 1
-	shot_count_label.text = "Shots: %d" % shot_count
+	GameState.shot_count += 1
+	shot_count_label.text = "%d" % GameState.shot_count
 
 # Handles resetting all sequence inputs and changes the button icons back to default.
 func reset_inputs():
