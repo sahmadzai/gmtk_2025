@@ -55,7 +55,7 @@ func _on_play_button_pressed():
 	set_process_input(false)
 
 	# Fade to black
-	TransitionScreen.transition(1)
+	TransitionScreen.transition(2)
 	await TransitionScreen.on_transition_finished
 
 	# Load the main game scene
