@@ -39,12 +39,7 @@ func _ready():
 	DEFAULT_BUTTON_ICON = load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_question_outline.png")
 	
 	# --- setup ---
-	
-	# reset shot count on first level only (non-tutorial)
-	var scene_name = get_tree().current_scene.scene_file_path.get_file().get_basename()
-	if scene_name == "level1":
-		GameState.shot_count = 0
-	
+		
 	# show the persisted count
 	shot_count_label.text = "%d" % GameState.shot_count
 	
