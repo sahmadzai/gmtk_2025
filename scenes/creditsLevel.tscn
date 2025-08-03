@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://p6txftwmrpeh" path="res://scenes/ball_player.tscn" id="4_wq1sj"]
 [ext_resource type="Script" uid="uid://dabri4gd04fq0" path="res://scripts/ball_player_credits.gd" id="6_wjm7c"]
 
-[node name="Node2D2" type="Node2D"]
+[node name="Node2D" type="Node2D"]
 script = ExtResource("1_eby6o")
 
 [node name="SegmentA" parent="." instance=ExtResource("1_yma2o")]
