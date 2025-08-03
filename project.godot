@@ -11,8 +11,14 @@ config_version=5
 [application]
 
 config/name="GMTK_2025"
-run/main_scene="uid://cj6t52bxwsta6"
+run/main_scene="uid://bghmr6kn4u6x2"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+
+[autoload]
+
+GameState="*res://scripts/gameState.gd"
+BgAudio="*res://scenes/bg_audio.tscn"
+TransitionScreen="*res://scenes/transition_screen.tscn"
 
 [input]
 
