@@ -32,7 +32,11 @@ func _ready():
 	print("the starting position is ", starting_position)
 	update_animation(Vector2.ZERO) # idle animation on load-in
 	
-	if GameState.was_win_transition:
+	# free control on credits screen! :D 
+	if is_in_title_or_credits_scene():
+		manual_control = true
+	
+	elif GameState.was_win_transition:
 		GameState.was_win_transition = false
 		is_dead_animation = true
 		
@@ -56,6 +60,11 @@ func _ready():
 
 func _on_intro_transition_finished():
 	is_dead_animation = false
+	
+func is_in_title_or_credits_scene() -> bool:
+	var root = get_tree().get_root()
+	var current_scene_root = root.get_child(root.get_child_count() - 1)
+	return current_scene_root.is_class("Control")
 
 func _input(event):
 	if event.is_action_pressed("toggle_manual"):  # Press M to toggle manual control
@@ -216,7 +225,7 @@ func _physics_process(delta):
 # check if we're on deadly water
 func _is_in_deadly_water(death_position: Vector2) -> bool:
 	if not is_instance_valid(water_layer):
-		print("Water layer was not found, returning false. (Since this is a golf game, why doesn't your level have a water layer?)")
+		#print("Water layer was not found, returning false. (Since this is a golf game, why doesn't your level have a water layer?)") # comment out in prod
 		return false
 
 	var map_coords = water_layer.local_to_map(death_position)
@@ -230,7 +239,7 @@ func _is_in_deadly_water(death_position: Vector2) -> bool:
 # check if we're on deadly water
 func _is_in_winning_hole(win_position: Vector2) -> bool:
 	if not is_instance_valid(path_layer):
-		print("Path layer was not found, returning false. (Since this is a golf game, why doesn't your level have a path layer?)")
+		#print("Path layer was not found, returning false. (Since this is a golf game, why doesn't your level have a path layer?)") # comment out in prod
 		return false
 
 	var map_coords = path_layer.local_to_map(win_position)

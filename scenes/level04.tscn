@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://dywbbogqfuh72"]
+[gd_scene load_steps=19 format=4 uid="uid://chjjbdvya16tp"]
 
 [ext_resource type="Script" uid="uid://fdcufumcdlsm" path="res://scripts/main.gd" id="1_xq1rl"]
 [ext_resource type="Texture2D" uid="uid://6cu8nm4u2o8i" path="res://assets/golf_tileset/OutdoorsTileset.png" id="2_duffk"]

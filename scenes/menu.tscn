@@ -1,9 +1,17 @@
-[gd_scene load_steps=12 format=3 uid="uid://bghmr6kn4u6x2"]
+[gd_scene load_steps=20 format=3 uid="uid://bghmr6kn4u6x2"]
 
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_menu"]
 [ext_resource type="AudioStream" uid="uid://b7eg4b66gft2o" path="res://assets/audio_sounds/retro_menu_hover.mp3" id="4_mhnvy"]
 [ext_resource type="FontFile" uid="uid://bb0epgadnq1ob" path="res://assets/fonts/Maesto-Regular_demo.otf" id="5_g3eks"]
+[ext_resource type="PackedScene" uid="uid://p6txftwmrpeh" path="res://scenes/ball_player.tscn" id="5_ufwb2"]
+[ext_resource type="Script" uid="uid://bam4sneruv47s" path="res://scripts/ball_player.gd" id="6_6cdou"]
 [ext_resource type="FontFile" uid="uid://cxtr76q8hcg8u" path="res://assets/fonts/ByteBounce.ttf" id="6_v86rl"]
+[ext_resource type="AudioStream" uid="uid://dabn6wdx6y0yj" path="res://assets/audio_sounds/drip.mp3" id="7_i42df"]
+[ext_resource type="AudioStream" uid="uid://tysma0ppy3bg" path="res://assets/audio_sounds/blub.mp3" id="8_7jp70"]
+[ext_resource type="AudioStream" uid="uid://tq0i5kx7at5l" path="res://assets/audio_sounds/splash.mp3" id="9_mxgkd"]
+[ext_resource type="AudioStream" uid="uid://dkihw52ri15at" path="res://assets/audio_sounds/cup.mp3" id="10_g6gyw"]
+[ext_resource type="AudioStream" uid="uid://ckreaonq78xrx" path="res://assets/audio_sounds/goku.mp3" id="11_3dmrc"]
+[ext_resource type="AudioStream" uid="uid://b55f1kv5gg1s5" path="res://assets/audio_sounds/bonk.mp3" id="12_81l6r"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 line_spacing = 0.0
@@ -150,6 +158,31 @@ text = "QUIT"
 [node name="HoverSFX" type="AudioStreamPlayer2D" parent="VBoxContainer/QuitButton"]
 stream = ExtResource("4_mhnvy")
 volume_db = 5.0
+
+[node name="BallPlayer" parent="." instance=ExtResource("5_ufwb2")]
+position = Vector2(216, 56)
+scale = Vector2(6, 6)
+script = ExtResource("6_6cdou")
+
+[node name="Tween" type="Node" parent="BallPlayer"]
+
+[node name="DeathSound1" type="AudioStreamPlayer2D" parent="BallPlayer"]
+stream = ExtResource("7_i42df")
+
+[node name="DeathSound2" type="AudioStreamPlayer2D" parent="BallPlayer"]
+stream = ExtResource("8_7jp70")
+
+[node name="DeathSound3" type="AudioStreamPlayer2D" parent="BallPlayer"]
+stream = ExtResource("9_mxgkd")
+
+[node name="WinSound1" type="AudioStreamPlayer2D" parent="BallPlayer"]
+stream = ExtResource("10_g6gyw")
+
+[node name="TransitionSound1" type="AudioStreamPlayer2D" parent="BallPlayer"]
+stream = ExtResource("11_3dmrc")
+
+[node name="WallSound1" type="AudioStreamPlayer2D" parent="BallPlayer"]
+stream = ExtResource("12_81l6r")
 
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

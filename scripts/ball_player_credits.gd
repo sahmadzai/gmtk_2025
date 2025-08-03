@@ -5,7 +5,7 @@
 
 extends CharacterBody2D
 
-const SPEED := 500.0  # Movement speed in credits screen
+const SPEED := 800.0  # Movement speed in credits screen
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
