@@ -20,9 +20,11 @@ var selected_button : Button = null
 var move_sequence := []
 var tween_map: Dictionary = {}
 var should_auto_focus = true
+var shot_count: int = 0
+@onready var shot_count_label: Label = $"MarginContainer/BottomRow/ShotCount/ShotCount"
 
 func _get_buttons():
-	return get_node("MarginContainer/HBoxContainer/HBoxContainer").get_children()
+	return get_node("MarginContainer/BottomRow/InputsContainer/HBoxContainer").get_children()
 
 func _ready():
 	print("INGAMEUI SCRIPT READY")
@@ -37,6 +39,13 @@ func _ready():
 	DEFAULT_BUTTON_ICON = load("res://assets/kenney_input-prompts_1.4/Keyboard & Mouse/Default/keyboard_question_outline.png")
 	
 	# --- setup ---
+	
+	# initialize shot count
+	shot_count = 0
+	shot_count_label.text = "%d" % shot_count
+	# connect our own “final” signal so we can bump the counter
+	connect("final_move_input_updated", Callable(self, "_on_shot_fired"))
+	
 	var buttons = _get_buttons()         # grabs the number of buttons that are in the scene tree
 	move_sequence.resize(buttons.size()) # resizes the internal move sequence counter based on the number of buttons grabbed from the scene tree
 
@@ -144,6 +153,11 @@ func _on_backspace():
 		index -= 1
 	_set_selected_button(buttons[index] as Button)
 	selected_button.icon = DEFAULT_BUTTON_ICON
+
+# called when the user has filled out the entire move_sequence
+func _on_shot_fired(_move_sequence):
+	shot_count += 1
+	shot_count_label.text = "Shots: %d" % shot_count
 
 # Handles resetting all sequence inputs and changes the button icons back to default.
 func reset_inputs():

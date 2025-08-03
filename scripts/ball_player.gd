@@ -30,6 +30,31 @@ func _ready():
 	print("BALL PLAYER SCRIPT READY")
 	starting_position = global_position # write down the player's initial starting position
 	update_animation(Vector2.ZERO) # idle animation on load-in
+	
+	if GameState.was_win_transition:
+		GameState.was_win_transition = false
+		is_dead_animation = true
+		
+		# Get current scene name (e.g. "tutorial01")
+		var scene_path = get_tree().current_scene.scene_file_path
+		var scene_name = scene_path.get_file().get_basename()
+		
+		# Use fallback if missing
+		starting_position = GameState.level_start_positions.get(scene_name, global_position)
+		
+		# Start with huge scale
+		scale = Vector2(70.0, 70.0)
+		
+		var tween_instance = get_tree().create_tween()
+		tween_instance.set_parallel(true)
+		tween_instance.tween_property(self, "scale", Vector2(1, 1), 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween_instance.tween_property(self, "global_position", starting_position, 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween_instance.connect("finished", Callable(self, "_on_intro_transition_finished"))
+	else:
+		starting_position = global_position
+
+func _on_intro_transition_finished():
+	is_dead_animation = false
 
 func _input(event):
 	if event.is_action_pressed("toggle_manual"):  # Press M to toggle manual control
@@ -89,9 +114,7 @@ func _clear_actions_but_keep_position():
 	emit_signal("actions_list_cleared")
 	
 func _hit_wall_sound_and_shake():
-	
 	wall_sounds[randi() % len(wall_sounds)].play()
-			
 	var camera = get_parent().get_node("Camera2D")
 
 	# Check if the camera node exists before trying to call the function
@@ -113,7 +136,11 @@ func _physics_process(delta):
 	# if in deadly water, start death animation
 	elif _is_in_deadly_water(global_position):
 		print("Player is in deadly water! Starting death animation.")
+		TransitionScreen.transition(3) # REMOVE IF DISLIKE FADE ON DEATH
 		_start_death_animation()
+		await TransitionScreen.on_transition_finished # REMOVE IF DISLIKE
+		
+
 		return
 	
 	# Complete movement and snap to grid
@@ -184,12 +211,12 @@ func _physics_process(delta):
 				moving = true
 
 # check if we're on deadly water
-func _is_in_deadly_water(position: Vector2) -> bool:
+func _is_in_deadly_water(death_position: Vector2) -> bool:
 	if not is_instance_valid(water_layer):
 		print("Water layer was not found, returning false. (Since this is a golf game, why doesn't your level have a water layer?)")
 		return false
 
-	var map_coords = water_layer.local_to_map(position)
+	var map_coords = water_layer.local_to_map(death_position)
 	var tile_data = water_layer.get_cell_tile_data(map_coords) # Assumes WaterLayer is layer 0
 	
 	if tile_data and tile_data.get_custom_data("waterDeath"):
@@ -198,12 +225,12 @@ func _is_in_deadly_water(position: Vector2) -> bool:
 	return false
 	
 # check if we're on deadly water
-func _is_in_winning_hole(position: Vector2) -> bool:
+func _is_in_winning_hole(win_position: Vector2) -> bool:
 	if not is_instance_valid(path_layer):
 		print("Path layer was not found, returning false. (Since this is a golf game, why doesn't your level have a path layer?)")
 		return false
 
-	var map_coords = path_layer.local_to_map(position)
+	var map_coords = path_layer.local_to_map(win_position)
 	var tile_data = path_layer.get_cell_tile_data(map_coords) # Assumes WaterLayer is layer 0
 	
 	if tile_data and tile_data.get_custom_data("holeWin"):
@@ -250,6 +277,10 @@ func _start_win_animation():
 	update_animation(Vector2.ZERO) # TODO (easy): can we update the animation to a DEATH one? like X_X eyes or something
 
 	win_sounds[randi() % len(win_sounds)].play()
+	
+	# Set next scene path using GameState method
+	var current_scene = get_tree().current_scene.scene_file_path.get_file().get_basename()
+	GameState.next_scene_path = GameState.get_next_scene_path(current_scene)
 
 	var tween_instance = get_tree().create_tween()
 	tween_instance.tween_property(self, "scale", Vector2(0.1, 0.1), 0.5)
@@ -267,10 +298,19 @@ func _win_animation_next(): # should ONLY be called by _start_win_animation
 	tween_instance.connect("finished", Callable(self, "_win_animation_finished"))
 	
 func _win_animation_finished():
-	print("Win animation finished. Reloading scene.")
-	# animation is done
-	is_dead_animation = false
-	_press_R_restart()
+	print("Win animation finished. Changing scene.")
+	GameState.was_win_transition = true
+	
+	# Check if we're going to the credits scene
+	if GameState.next_scene_path.contains("credits"):
+		# Run fade transition in parallel with scene change
+		print("Transitioning to credits scene with fade.")
+		TransitionScreen.transition(1)
+		await TransitionScreen.on_transition_finished
+		get_tree().change_scene_to_file(GameState.next_scene_path)
+	else:
+		# Normal transition for other levels
+		get_tree().change_scene_to_file(GameState.next_scene_path)
 
 func _on_move_inputs_updated(new_sequence):
 	move_sequence = new_sequence.duplicate()
@@ -281,7 +321,6 @@ func _on_move_inputs_updated(new_sequence):
 func _on_final_move_input_updated(new_sequence):
 	print("Final move inputted, auto-focus running.")
 	_on_move_inputs_updated(new_sequence)
-	
 	# simulate an event start (G press)
 	_press_G_start()
 	
@@ -307,7 +346,6 @@ func update_animation(input_vector: Vector2, set_custom : String = "") -> void:
 			print("Sad animation not implemented yet.")
 		elif set_custom == "smug":
 			anim.play("smug")
-	
 	# Determine idle animation based on last direction
 	elif input_vector == Vector2.ZERO:
 		anim.play("idle")
