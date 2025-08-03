@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=4 uid="uid://be5d2ykg0dojr"]
+[gd_scene load_steps=7 format=4 uid="uid://cofvhl7aii676"]
 
 [ext_resource type="Script" uid="uid://fdcufumcdlsm" path="res://scripts/main.gd" id="1_u23xw"]
 [ext_resource type="Texture2D" uid="uid://bv6qitovh16tu" path="res://assets/kenney_tiny-dungeon/Tilemap/tilemap_packed.png" id="2_kq3r6"]
@@ -178,10 +178,9 @@ process_callback = 0
 
 [node name="inGameUI" parent="." instance=ExtResource("4_vxn4p")]
 anchors_preset = 14
-anchor_top = 0.5
+anchor_left = 0.0
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -21.0
-offset_top = 226.0
-offset_right = -21.0
-offset_bottom = 226.0
+offset_left = 93.0
+offset_top = 192.0
+offset_right = 93.0
+offset_bottom = 192.0

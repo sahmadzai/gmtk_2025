@@ -1,0 +1,155 @@
+[gd_scene load_steps=12 format=3 uid="uid://bghmr6kn4u6x2"]
+
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_menu"]
+[ext_resource type="AudioStream" uid="uid://b7eg4b66gft2o" path="res://assets/audio_sounds/retro_menu_hover.mp3" id="4_mhnvy"]
+[ext_resource type="FontFile" uid="uid://bb0epgadnq1ob" path="res://assets/fonts/Maesto-Regular_demo.otf" id="5_g3eks"]
+[ext_resource type="FontFile" uid="uid://cxtr76q8hcg8u" path="res://assets/fonts/ByteBounce.ttf" id="6_v86rl"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+line_spacing = 0.0
+font = ExtResource("5_g3eks")
+font_size = 225
+font_color = Color(0.984917, 0.768609, 0.174638, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_subtitle"]
+font = ExtResource("6_v86rl")
+font_size = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_play_hover"]
+bg_color = Color(0.25, 0.8, 0.35, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 12
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_play_pressed"]
+bg_color = Color(0.15, 0.6, 0.25, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_play_normal"]
+bg_color = Color(0.2, 0.7, 0.3, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 8
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quit_hover"]
+bg_color = Color(0.7, 0.35, 0.25, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quit_normal"]
+bg_color = Color(0.6, 0.3, 0.2, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.145098, 0.588235, 0.745098, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -160.5
+offset_right = 200.0
+offset_bottom = 160.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -30
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "BALLSY"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "a lone golf ball's journey"
+label_settings = SubResource("LabelSettings_subtitle")
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(250, 80)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_v86rl")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/hover = SubResource("StyleBoxFlat_play_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_play_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_play_normal")
+text = "PLAY"
+
+[node name="HoverSFX" type="AudioStreamPlayer2D" parent="VBoxContainer/PlayButton"]
+stream = ExtResource("4_mhnvy")
+volume_db = 5.0
+
+[node name="Spacer2" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(500, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("6_v86rl")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_quit_hover")
+theme_override_styles/normal = SubResource("StyleBoxFlat_quit_normal")
+text = "QUIT"
+
+[node name="HoverSFX" type="AudioStreamPlayer2D" parent="VBoxContainer/QuitButton"]
+stream = ExtResource("4_mhnvy")
+volume_db = 5.0
+
+[connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
