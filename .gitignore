@@ -1,4 +1,4 @@
-
+assets/*
 !assets/.keep
 icon.svg.import
 project.godot
