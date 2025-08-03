@@ -22,8 +22,7 @@ var level0_progression := {
 	#"tutorial03": "res://scenes/credits.tscn", # Comment in PROD, just testing end screen
 	"level01": "res://scenes/level02.tscn",
 	"level02": "res://scenes/level03.tscn",
-	"level03": "res://scenes/level04.tscn",
-	"level04": "res://scenes/credits.tscn"
+	"level03": "res://scenes/credits.tscn"
 }
 
 # Dictionary mapping of how many input‐buttons each level0 has
@@ -31,10 +30,9 @@ var max_inputs := {
 	"tutorial01": 1,
 	"tutorial02": 4,
 	"tutorial03": 5,
-	"level01":     5,
-	"level02":     5,
-	"level03":     3,
-	"level04":     1,
+	"level01":    5,
+	"level02":    5,
+	"level03":    3,
 }
 
 func get_next_scene_path(current_scene_name: String) -> String:
